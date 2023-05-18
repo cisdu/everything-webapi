@@ -3,7 +3,9 @@
 #### 介绍
 windows everything 本地搜索工具的webapi,使用自带的http服务，解析这个http服务的结果，构建webapi,返回json数据。
 
-json数据如下：
+请求地址：https://localhost:44380/api/HtmlParser?html=153441602687
+
+返回json数据如下：
 {
     "numresults": 1,
     "data": [
