@@ -1,4 +1,4 @@
-﻿using HtmlAgilityPack;
+using HtmlAgilityPack;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
@@ -55,35 +55,7 @@ namespace everything_webapi11.Controllers
                     var item = new Dictionary<string, object>();
                     item["name"] = cells[0].InnerText.Trim();
                     item["path"] = cells[1].InnerText.Trim();
-
-                    //每个path 都需要反向查找taskbill xh 给出摘要
-                    string pattern_upload = @"(?<=upload\\).*$";
-                    Match match_upload = Regex.Match(item["path"].ToString(), pattern);
-                    var path = match2.Value;
-
-                    var sql = $"select taskbillno from TASKBILL_ATTACHMENT where attachement like '%{path}%'";
-
-                    var taskbillno = DBhelper.ExecuteScalar(sql, connectionString);
-                    if(taskbillno != null )
-                    {
-                        item["taskbillno"] = taskbillno.ToString();
-                        sql = $"select a.xh,a.rwtitle ,a.yydm,i.name,a.djrq from TaskBill a left join Hospital i on a.yydm = i.id   where xh = '{ taskbillno.ToString()}'";
-                        var ds=DBhelper.GetDataSetForSql(sql, null, CommandType.Text, connectionString);
-
-                        // 将 DataSet 转换为 JSON 格式
-                        var resultTask = ds.Tables[0].AsEnumerable().Select(row => new
-                        {
-                            xh = row["xh"].ToString(),
-                            rwtitle = row["rwtitle"].ToString(),
-                            yydm = row["yydm"].ToString(),
-                            name = row["name"].ToString(),
-                            djrq = row["djrq"].ToString()
-                        });
-                       
-
-                        item["taskdetail"] = resultTask;
-                    }
-                   item["size"] = cells[2].InnerText.Trim();
+                    item["size"] = cells[2].InnerText.Trim();
                     result.data.Add(item);
                 }
             }
